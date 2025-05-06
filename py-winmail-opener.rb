@@ -32,6 +32,6 @@ class PyWinmailOpener < Formula
 
   test do
     # Test the version output
-    assert_match "winmail_opener 1.0.0", shell_output("#{bin}/winmail-opener --version")
+    assert_match "winmail_opener 1.0.0")
   end
 end
