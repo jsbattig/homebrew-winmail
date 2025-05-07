@@ -4,7 +4,7 @@ class PyWinmailOpener < Formula
   url "https://github.com/jsbattig/py-winmail-opener/archive/refs/tags/v1.0.9.tar.gz"
   sha256 "d9125ddfdd57897422d70edf42543c7f6bde21c14526b52121f99fc494665aad"
   license "MIT"
-  
+
   # Skip binary validation for all our files
   skip_clean :all
 
@@ -31,7 +31,7 @@ class PyWinmailOpener < Formula
   def post_install
     # Try to run the installer automatically with homebrew mode
     system "#{Formula["python@3.10"].opt_bin}/python3.10", "#{libexec}/install.py", "--homebrew-mode"
-    
+
     if $?.success?
       puts "WinmailOpener.app was successfully created and installed!"
       puts "You can now open .dat files with WinmailOpener."
