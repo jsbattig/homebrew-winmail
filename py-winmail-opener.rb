@@ -5,8 +5,8 @@ class PyWinmailOpener < Formula
   sha256 "125942cbcf412b7af64b5ed3b393d4fbe9fb68644f4161518bf002a4e965eca7"
   license "MIT"
   
-  # Skip binary validation for our script files
-  skip_clean "libexec/bin"
+  # Skip binary validation for all our files
+  skip_clean :all
 
   depends_on "python@3.10"
   depends_on "duti" => :recommended
