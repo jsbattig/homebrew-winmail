@@ -1,8 +1,8 @@
 class PyWinmailOpener < Formula
-desc "Extract attachments and email body from Winmail.dat files"
+  desc "Extract attachments and email body from Winmail.dat files"
   homepage "https://github.com/jsbattig/py-winmail-opener"
-  url "https://github.com/jsbattig/py-winmail-opener/archive/refs/tags/v2.0.10.tar.gz"
-  sha256 "af3b5616e824a98a5c070c5057b1407479967321ebe287b8d2b38b43c93d5ef3"
+  url "https://github.com/jsbattig/py-winmail-opener/archive/refs/tags/v2.0.12.tar.gz"
+  sha256 "3ea398912ed31bbe4ae8e0069f1a99f5bb034098716c368abbe01c03cf521b01"
   license "MIT"
   revision 2
 
@@ -43,24 +43,23 @@ desc "Extract attachments and email body from Winmail.dat files"
   def post_install
     # Try to run the installer automatically with homebrew mode
     venv = libexec/"venv"
-    
     # Use backticks to capture the output instead of system() which suppresses it
     output = `#{venv}/bin/python "#{libexec}/install.py" --homebrew-mode`
-    success = $?.success?
-    
+    require "English"
+    success = $CHILD_STATUS.success?
     # Always show the output to help with debugging
     puts output
-    
     # Additional output based on success/failure
     if success
       puts "WinmailOpener.app was successfully created and installed!"
       puts "You can now open .dat files with WinmailOpener."
-      
       # Force refresh of Launch Services
       system "killall", "Finder"
       # Get the actual app location from the output
       app_path = output.match(/Installing app to (.+)/)&.[](1) || "#{libexec}/WinmailOpener.app"
-      system "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister", "-f", "-r", app_path
+      register_cmd = "/System/Library/Frameworks/CoreServices.framework"
+      register_cmd += "/Frameworks/LaunchServices.framework/Support/lsregister"
+      system register_cmd, "-f", "-r", app_path
     else
       puts "Automatic app creation failed. This might be due to permission restrictions."
       puts "To create the app manually, run the following command:"
@@ -70,22 +69,21 @@ desc "Extract attachments and email body from Winmail.dat files"
 
   def pre_uninstall
     # Fix permissions on files that might cause apply2files errors during cleanup
-    begin
-      # Execute permission fix in uninstall.py
-      venv = libexec/"venv"
-      system "#{venv}/bin/python", "#{libexec}/uninstall.py", "--homebrew-mode", "--force", "--keep-logs", "--keep-venv"
-    rescue
-      # Don't fail if this doesn't work - the main uninstall will still run
-      opoo "Pre-uninstall cleanup encountered errors but will continue with uninstallation"
-    end
+    # Execute permission fix in uninstall.py
+    venv = libexec/"venv"
+    system "#{venv}/bin/python", "#{libexec}/uninstall.py", "--homebrew-mode", "--force", "--keep-logs", "--keep-venv"
+  rescue
+    # Don't fail if this doesn't work - the main uninstall will still run
+    opoo "Pre-uninstall cleanup encountered errors but will continue with uninstallation"
   end
 
-  def uninstall(*args)
+  def uninstall(*)
     # Run our custom uninstaller to ensure proper cleanup
     venv = libexec/"venv"
     system "#{venv}/bin/python", "#{libexec}/uninstall.py", "--homebrew-mode", "--force"
 
-    if $?.success?
+    require "English"
+    if $CHILD_STATUS.success?
       puts "WinmailOpener was successfully removed from your system."
     else
       puts "Some errors occurred during uninstallation. Please check the output above."
@@ -96,6 +94,6 @@ desc "Extract attachments and email body from Winmail.dat files"
 
   test do
     # Test the version output
-    assert_match "winmail_opener 2.0.10", shell_output("#{bin}/winmail-opener --version")
+    assert_match "winmail_opener 2.0.12", shell_output("#{bin}/winmail-opener --version")
   end
 end
