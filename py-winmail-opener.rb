@@ -43,15 +43,28 @@ desc "Extract attachments and email body from Winmail.dat files"
   def post_install
     # Try to run the installer automatically with homebrew mode
     venv = libexec/"venv"
-    system "#{venv}/bin/python", "#{libexec}/install.py", "--homebrew-mode"
-
-    if $?.success?
+    
+    # Use backticks to capture the output instead of system() which suppresses it
+    output = `#{venv}/bin/python "#{libexec}/install.py" --homebrew-mode`
+    success = $?.success?
+    
+    # Always show the output to help with debugging
+    puts output
+    
+    # Additional output based on success/failure
+    if success
       puts "WinmailOpener.app was successfully created and installed!"
       puts "You can now open .dat files with WinmailOpener."
+      
+      # Force refresh of Launch Services
+      system "killall", "Finder"
+      # Get the actual app location from the output
+      app_path = output.match(/Installing app to (.+)/)&.[](1) || "#{libexec}/WinmailOpener.app"
+      system "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister", "-f", "-r", app_path
     else
       puts "Automatic app creation failed. This might be due to permission restrictions."
       puts "To create the app manually, run the following command:"
-      puts "  #{venv}/bin/python #{libexec}/install.py"
+      puts "  sudo #{venv}/bin/python #{libexec}/install.py"
     end
   end
 
