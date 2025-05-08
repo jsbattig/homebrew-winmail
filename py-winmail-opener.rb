@@ -1,8 +1,8 @@
 class PyWinmailOpener < Formula
   desc "Extract attachments and email body from Winmail.dat files"
   homepage "https://github.com/jsbattig/py-winmail-opener"
-  url "https://github.com/jsbattig/py-winmail-opener/archive/refs/tags/v2.0.2.tar.gz"
-  sha256 "34b0826d3bd4bb3e9270bdd8630852b297416a3b7d33ecc5009e493339efbb2c"
+  url "https://github.com/jsbattig/py-winmail-opener/archive/refs/tags/v2.0.3.tar.gz"
+  sha256 "12c44587cd01fe55ac201a688ffb2b9e501388c8a61254ceff75b1f0351f800e"
   license "MIT"
 
   # Skip binary validation for all our files
@@ -44,6 +44,6 @@ class PyWinmailOpener < Formula
 
   test do
     # Test the version output
-    assert_match "winmail_opener 2.0.2", shell_output("#{bin}/winmail-opener --version")
+    assert_match "winmail_opener 2.0.3", shell_output("#{bin}/winmail-opener --version")
   end
 end
