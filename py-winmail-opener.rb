@@ -6,12 +6,6 @@ desc "Extract attachments and email body from Winmail.dat files"
   license "MIT"
   revision 2
 
-  # Explicitly disable bottle - not a compiled binary
-  bottle :unneeded
-
-  # Skip binary validation for all our files
-  skip_clean :all
-
   depends_on "python@3.10"
   depends_on "duti" => :recommended
 
