@@ -1,10 +1,53 @@
-# py-winmail-opener Homebrew Tap
+py-winmail-opener Homebrew Tap
 
 This repository is a Homebrew tap for [py-winmail-opener](https://github.com/jsbattig/py-winmail-opener), a tool for extracting attachments and email body from Winmail.dat files.
 
+## Important: Transition to Cask-based Distribution
+
+**As of version 2.0.0**, py-winmail-opener has transitioned from a Homebrew formula to a Homebrew cask for improved security and compatibility. This means:
+
+- Installation commands have changed (see below)
+- The application is now distributed as a pre-built DMG file
+- Security issues with antivirus software have been addressed
+
+## Installation
+
+### New Cask-based Installation (Recommended)
+
+```bash
+# Add the tap (if you haven't already)
+brew tap jsbattig/winmail
+
+# Install the cask
+brew install --cask jsbattig/winmail/py-winmail-opener
+```
+
+### Legacy Formula Installation (Deprecated)
+
+The formula-based installation is now deprecated and will be removed in a future update:
+
+```bash
+# This is the old method and is no longer recommended
+brew install jsbattig/winmail/py-winmail-opener
+```
+
+## Uninstallation
+
+### Uninstall Cask
+
+```bash
+brew uninstall --cask py-winmail-opener
+```
+
+### Uninstall Formula (Legacy)
+
+```bash
+brew uninstall py-winmail-opener
+```
+
 ## Overview
 
-This directory is managed as a Git submodule of the main py-winmail-opener repository to enable coordinated development and releases. When changes are made to the main application, corresponding changes to the Homebrew formula can be made and tracked together.
+This repository is managed as a Git submodule of the main py-winmail-opener repository to enable coordinated development and releases. When changes are made to the main application, corresponding changes to the Homebrew cask can be made and tracked together.
 
 ## Working with this Submodule
 
@@ -13,12 +56,12 @@ This directory is managed as a Git submodule of the main py-winmail-opener repos
 If you're just using py-winmail-opener, you can install it with:
 
 ```bash
-brew install jsbattig/winmail/py-winmail-opener
+brew install --cask jsbattig/winmail/py-winmail-opener
 ```
 
 ### For Developers
 
-If you're contributing to py-winmail-opener and need to update the formula:
+If you're contributing to py-winmail-opener and need to update the cask:
 
 1. **Clone the repository with submodules**:
    ```bash
@@ -34,7 +77,7 @@ If you're contributing to py-winmail-opener and need to update the formula:
    ```bash
    # Update main repository
    git pull
-   
+
    # Update submodule to latest
    git submodule update --remote homebrew
    ```
@@ -43,37 +86,37 @@ If you're contributing to py-winmail-opener and need to update the formula:
    ```bash
    # 1. Navigate to submodule directory
    cd homebrew
-   
-   # 2. Make changes to formula
-   # (edit py-winmail-opener.rb)
-   
+
+   # 2. Make changes to cask formula
+   # (edit Casks/py-winmail-opener.rb)
+
    # 3. Commit changes in submodule
-   git add py-winmail-opener.rb
-   git commit -m "Update formula for version X.Y.Z"
+   git add Casks/py-winmail-opener.rb
+   git commit -m "Update cask for version X.Y.Z"
    git push
-   
+
    # 4. Return to main repository and commit submodule update
    cd ..
    git add homebrew
-   git commit -m "Update Homebrew formula submodule reference"
+   git commit -m "Update Homebrew cask submodule reference"
    git push
    ```
 
-## Formula Structure
+## Cask Structure
 
-The py-winmail-opener formula:
+The py-winmail-opener cask:
 
-1. Installs Python files to `libexec` to avoid conflicts
-2. Creates scripts in `libexec/bin` with proper symlinks to system `bin`
-3. Uses `skip_clean :all` to prevent binary validation errors
-4. Creates an AppleScript application for handling .dat files
+1. Installs a pre-built app bundle to the Applications folder
+2. Creates a binary symlink for command-line usage
+3. Provides clean uninstallation with `zap` directive
+4. Automatically handles file associations through the app bundle
 
 ## Troubleshooting
 
-If you encounter issues with the formula:
+If you encounter issues with the cask:
 
 1. Make sure both repositories are up to date
-2. Check that formula version matches the application version
-3. Verify that the SHA256 is correct for the tagged version
+2. Check that cask version matches the application version
+3. Verify that the SHA256 is correct for the DMG file
 
 For more details, see the [main project documentation](https://github.com/jsbattig/py-winmail-opener).
