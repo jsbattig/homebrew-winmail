@@ -1,6 +1,6 @@
 cask "py-winmail-opener" do
-  version "1.1.9"
-  sha256 "2d457c58d913db4540dd3a9bc0f4acc990a584933a3e427af4aff2e97baad822"
+  version "1.1.10"
+  sha256 "f08b246fb0c44566d34ec3c1b71caebb7589d7e89cef1ee075e495d878554354"
   
   url "https://github.com/jsbattig/py-winmail-opener/releases/download/v#{version}/WinmailOpener-#{version}.dmg"
   name "WinmailOpener"
