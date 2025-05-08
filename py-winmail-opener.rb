@@ -72,6 +72,20 @@ class PyWinmailOpener < Formula
       opoo "Pre-uninstall cleanup encountered errors but will continue with uninstallation"
     end
   end
+  
+  def uninstall(args=nil)
+    # Run our custom uninstaller to ensure proper cleanup
+    venv = libexec/"venv"
+    system "#{venv}/bin/python", "#{libexec}/uninstall.py", "--homebrew-mode", "--force"
+    
+    if $?.success?
+      puts "WinmailOpener was successfully removed from your system."
+    else
+      puts "Some errors occurred during uninstallation. Please check the output above."
+      puts "If needed, you can manually run the uninstaller with:"
+      puts "  #{venv}/bin/python #{libexec}/uninstall.py --force"
+    end
+  end
 
   test do
     # Test the version output
