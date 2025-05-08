@@ -1,11 +1,11 @@
 class PyWinmailOpener < Formula
-  desc "Extract attachments and email body from Winmail.dat files"
+desc "Extract attachments and email body from Winmail.dat files"
   homepage "https://github.com/jsbattig/py-winmail-opener"
   url "https://github.com/jsbattig/py-winmail-opener/archive/refs/tags/v2.0.7.tar.gz"
   sha256 "f8ed0daac6da06547babb0c84b999466612260a33868d1ecc3771833d9f71b1a"
   license "MIT"
   revision 2
-  
+
   # Explicitly disable bottle - not a compiled binary
   bottle :unneeded
 
@@ -26,7 +26,7 @@ class PyWinmailOpener < Formula
 
     # Skip cleanup of script files to avoid permission warnings during upgrade
     inreplace "install.py", "os.chmod(handler_script_path, 0o755)", "os.chmod(handler_script_path, 0o775)"
-    
+
     # Install our files to libexec
     libexec.install Dir["*"]
 
@@ -41,7 +41,7 @@ class PyWinmailOpener < Formula
 
     # Make the wrapper executable
     chmod 0755, libexec/"bin/winmail-opener"
-    
+
     # Create symlinks from the actual bin directory
     bin.install_symlink libexec/"bin/winmail-opener"
   end
@@ -60,7 +60,7 @@ class PyWinmailOpener < Formula
       puts "  #{venv}/bin/python #{libexec}/install.py"
     end
   end
-  
+
   def pre_uninstall
     # Fix permissions on files that might cause apply2files errors during cleanup
     begin
@@ -72,12 +72,12 @@ class PyWinmailOpener < Formula
       opoo "Pre-uninstall cleanup encountered errors but will continue with uninstallation"
     end
   end
-  
-  def uninstall(args=nil)
+
+  def uninstall(*args)
     # Run our custom uninstaller to ensure proper cleanup
     venv = libexec/"venv"
     system "#{venv}/bin/python", "#{libexec}/uninstall.py", "--homebrew-mode", "--force"
-    
+
     if $?.success?
       puts "WinmailOpener was successfully removed from your system."
     else
