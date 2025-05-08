@@ -4,7 +4,10 @@ class PyWinmailOpener < Formula
   url "https://github.com/jsbattig/py-winmail-opener/archive/refs/tags/v2.0.5.tar.gz"
   sha256 "299090eab5992792938231ff0592720cf02a89ceed81075ec722d0f9a118ae6c"
   license "MIT"
-  revision 1
+  revision 2
+  
+  # Explicitly disable bottle - not a compiled binary
+  bottle :unneeded
 
   # Skip binary validation for all our files
   skip_clean :all
@@ -27,17 +30,20 @@ class PyWinmailOpener < Formula
     # Install our files to libexec
     libexec.install Dir["*"]
 
-    # Create bin directory
-    bin.mkpath
+    # Create bin directory inside libexec
+    (libexec/"bin").mkpath
 
-    # Create a wrapper script that uses the virtualenv python
-    (bin/"winmail-opener").write <<~EOS
+    # Create the wrapper script inside libexec/bin
+    (libexec/"bin/winmail-opener").write <<~EOS
       #!/bin/bash
-      "#{venv}/bin/python" "#{libexec}/winmail_opener.py" "$@"
+      exec "#{venv}/bin/python" "#{libexec}/winmail_opener.py" "$@"
     EOS
 
     # Make the wrapper executable
-    chmod 0755, bin/"winmail-opener"
+    chmod 0755, libexec/"bin/winmail-opener"
+    
+    # Create symlinks from the actual bin directory
+    bin.install_symlink libexec/"bin/winmail-opener"
   end
 
   def post_install
